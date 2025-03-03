@@ -76,6 +76,11 @@
             text-decoration: none;
             border-radius: 5px;
         }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +93,7 @@
         </form>
 
         <a id="download-link" href="#" download>Click here to download</a>
-        <p id="error-message" style="color: red; margin-top: 10px;"></p>
+        <p id="error-message"></p>
     </div>
 
     <script>
@@ -106,7 +111,7 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ url: url })
+                body: JSON.stringify({ url: url })  // Send data as JSON
             })
             .then(response => response.json())
             .then(data => {
