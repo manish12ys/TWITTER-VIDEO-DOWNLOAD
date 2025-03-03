@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        #video-preview {
+            width: 80%;
+            max-width: 600px;
+            display: none;
+            margin-bottom: 20px;
+        }
+        #download-btn {
+            display: none;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Download Video</h2>
+    <video id="video-preview" controls></video>
+    <a id="download-btn" download>Download Video</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoUrl = urlParams.get("video");
+
+            if (videoUrl) {
+                const videoPreview = document.getElementById("video-preview");
+                const downloadBtn = document.getElementById("download-btn");
+
+                videoPreview.src = videoUrl;
+                videoPreview.style.display = "block";
+
+                downloadBtn.href = videoUrl;
+                downloadBtn.style.display = "block";
+            }
+        });
+    </script>
+
+</body>
+</html>
