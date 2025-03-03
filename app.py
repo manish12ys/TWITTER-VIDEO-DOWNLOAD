@@ -12,10 +12,11 @@ os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 def index():
     return render_template("index.html")
 
+
 @app.route("/download", methods=["POST"])
 def download_video():
-    data = request.get_json()
-    video_url = data.get("url")  # Get JSON data from AJAX request
+    data = request.get_json()  # Ensure the request is JSON
+    video_url = data.get("url")
 
     if not video_url:
         return jsonify({"error": "No URL provided"}), 400
@@ -34,9 +35,10 @@ def download_video():
         # Find the downloaded file dynamically
         downloaded_file = next(f for f in os.listdir(DOWNLOAD_FOLDER) if f.startswith("video"))
 
-        return jsonify({"file": f"/downloads/{downloaded_file}"})  # Send JSON response
+        return jsonify({"file": f"/downloads/{downloaded_file}"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/downloads/<filename>")
 def serve_download(filename):
