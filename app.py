@@ -1,8 +1,12 @@
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, jsonify, send_file
 import yt_dlp
 import os
 
 app = Flask(__name__)
+
+# Ensure downloads directory exists
+DOWNLOAD_FOLDER = "downloads"
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 @app.route("/")
 def index():
@@ -10,25 +14,32 @@ def index():
 
 @app.route("/download", methods=["POST"])
 def download_video():
-    video_url = request.form.get("url")
+    video_url = request.json.get("url")  # Get JSON data from AJAX request
 
     if not video_url:
-        return "Error: No URL provided."
+        return jsonify({"error": "No URL provided"}), 400
 
-    output_path = "downloads"
-    os.makedirs(output_path, exist_ok=True)
+    output_path = os.path.join(DOWNLOAD_FOLDER, "video.%(ext)s")
 
     ydl_opts = {
-        "outtmpl": f"{output_path}/video.%(ext)s",
+        "outtmpl": output_path,
         "format": "best"
     }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([video_url])
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([video_url])
 
-    downloaded_file = next(f for f in os.listdir(output_path) if f.startswith("video"))
+        # Find the downloaded file dynamically
+        downloaded_file = next(f for f in os.listdir(DOWNLOAD_FOLDER) if f.startswith("video"))
 
-    return send_file(f"{output_path}/{downloaded_file}", as_attachment=True)
+        return jsonify({"file": f"/downloads/{downloaded_file}"})  # Send JSON response
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/downloads/<filename>")
+def serve_download(filename):
+    return send_file(os.path.join(DOWNLOAD_FOLDER, filename), as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
