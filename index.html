@@ -5,128 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download X Video</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
         body {
+            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1DA1F2, #14171A);
-            color: white;
+            background-color: #f5f5f5;
         }
-
-        .container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        h2 {
-            margin-bottom: 15px;
-            font-size: 22px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
         input {
-            width: 100%;
+            width: 300px;
             padding: 10px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 5px;
+            margin: 10px;
             font-size: 16px;
         }
-
         button {
-            background: #1DA1F2;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            color: white;
             cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #0d8ce0;
-        }
-
-        #download-link {
-            display: none;
-            margin-top: 15px;
-            padding: 10px;
-            background: green;
-            color: white;
-            text-decoration: none;
+            font-size: 16px;
             border-radius: 5px;
-        }
-
-        #error-message {
-            color: red;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Download Video from X (Twitter)</h2>
-        <form id="download-form">
-            <label for="url">Enter X Video URL:</label>
-            <input type="text" id="url" name="url" required placeholder="https://x.com/...">
-            <button type="submit">Download</button>
-        </form>
 
-        <a id="download-link" href="#" download>Click here to download</a>
-        <p id="error-message"></p>
-    </div>
+    <h2>Download Video from X (Twitter)</h2>
+    <input type="text" id="url" placeholder="Enter X Video URL" required>
+    <button onclick="downloadVideo()">Download</button>
+    <p id="error-message" style="color: red;"></p>
 
-   <script>
-    document.getElementById("download-form").addEventListener("submit", function(event) {
-        event.preventDefault();  // Prevent form submission
-        const url = document.getElementById("url").value;
-        const errorMessage = document.getElementById("error-message");
-        const downloadLink = document.getElementById("download-link");
+    <script>
+        function downloadVideo() {
+            const url = document.getElementById("url").value;
+            const errorMessage = document.getElementById("error-message");
 
-        errorMessage.textContent = ""; // Clear previous errors
-        downloadLink.style.display = "none"; // Hide link initially
+            errorMessage.textContent = "";
 
-        fetch("/download", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ url: url })  // Send data as JSON
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                errorMessage.textContent = data.error;
-            } else {
-                downloadLink.href = data.file;
-                downloadLink.style.display = "block";
+            if (!url) {
+                errorMessage.textContent = "Please enter a valid URL.";
+                return;
             }
-        })
-        .catch(error => {
-            errorMessage.textContent = "An error occurred!";
-        });
-    });
-</script>
+
+            fetch("https://your-backend-url.com/download", {  // Change to your backend URL
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    errorMessage.textContent = data.error;
+                } else {
+                    window.location.href = `download.html?video=${encodeURIComponent(data.file)}`;
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = "An error occurred!";
+            });
+        }
+    </script>
 
 </body>
 </html>
