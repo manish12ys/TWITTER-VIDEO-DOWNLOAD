@@ -16,7 +16,3 @@ A **Flask-based web application** that allows users to download videos from X (f
 
 ---
 
-## 📌 Installation
-
-### 1️⃣ Clone the Repository
-`
