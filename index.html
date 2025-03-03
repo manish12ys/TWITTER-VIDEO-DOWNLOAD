@@ -96,36 +96,37 @@
         <p id="error-message"></p>
     </div>
 
-    <script>
-        document.getElementById("download-form").addEventListener("submit", function(event) {
-            event.preventDefault();  // Prevent form submission
-            const url = document.getElementById("url").value;
-            const errorMessage = document.getElementById("error-message");
-            const downloadLink = document.getElementById("download-link");
+   <script>
+    document.getElementById("download-form").addEventListener("submit", function(event) {
+        event.preventDefault();  // Prevent form submission
+        const url = document.getElementById("url").value;
+        const errorMessage = document.getElementById("error-message");
+        const downloadLink = document.getElementById("download-link");
 
-            errorMessage.textContent = ""; // Clear previous errors
-            downloadLink.style.display = "none"; // Hide link initially
+        errorMessage.textContent = ""; // Clear previous errors
+        downloadLink.style.display = "none"; // Hide link initially
 
-            fetch("/download", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ url: url })  // Send data as JSON
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    errorMessage.textContent = data.error;
-                } else {
-                    downloadLink.href = data.file;
-                    downloadLink.style.display = "block";
-                }
-            })
-            .catch(error => {
-                errorMessage.textContent = "An error occurred!";
-            });
+        fetch("/download", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ url: url })  // Send data as JSON
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                errorMessage.textContent = data.error;
+            } else {
+                downloadLink.href = data.file;
+                downloadLink.style.display = "block";
+            }
+        })
+        .catch(error => {
+            errorMessage.textContent = "An error occurred!";
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
