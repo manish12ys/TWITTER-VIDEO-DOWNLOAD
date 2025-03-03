@@ -14,7 +14,8 @@ def index():
 
 @app.route("/download", methods=["POST"])
 def download_video():
-    video_url = request.json.get("url")  # Get JSON data from AJAX request
+    data = request.get_json()
+    video_url = data.get("url")  # Get JSON data from AJAX request
 
     if not video_url:
         return jsonify({"error": "No URL provided"}), 400
