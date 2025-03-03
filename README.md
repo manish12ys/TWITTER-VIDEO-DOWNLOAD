@@ -1,11 +1,22 @@
-# 📥 X (Twitter) Video Downloader
+# 📥 X (Twitter) Video Downloader (AJAX Version)
 
-This is a simple **Flask-based web application** that allows users to download videos from X (formerly Twitter) by providing the video URL.
-
-## 🚀 Features
-- 🖥️ **Web Interface** – Simple and user-friendly UI  
-- 📥 **Download Videos** – Extract and save X videos easily  
-- ⚡ **Fast & Efficient** – Uses `yt-dlp` for reliable downloading  
-- 📱 **Responsive Design** – Works on desktop & mobile  
+A **Flask-based web application** that allows users to download videos from X (formerly Twitter) by providing the video URL.  
+✅ **No Page Refresh** – Uses AJAX for smooth interaction.  
+✅ **Fast & Efficient** – Uses `yt-dlp` for reliable downloading.  
+✅ **Responsive UI** – Works on both desktop & mobile.  
 
 ---
+
+## 🚀 Features
+- 🖥 **Web-Based** – Simple UI, no extra setup needed.
+- 📥 **Download Without Page Refresh** – Uses AJAX to fetch & display the download link.
+- ⚡ **High-Speed Processing** – Extracts the highest quality video.
+- 📱 **Mobile-Friendly** – Fully responsive UI.
+- 🛠 **Error Handling** – Displays errors dynamically without redirecting.
+
+---
+
+## 📌 Installation
+
+### 1️⃣ Clone the Repository
+`
