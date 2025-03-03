@@ -66,16 +66,61 @@
         button:hover {
             background: #0d8ce0;
         }
+
+        #download-link {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Download Video from X (Twitter)</h2>
-        <form action="/download" method="post">
+        <form id="download-form">
             <label for="url">Enter X Video URL:</label>
             <input type="text" id="url" name="url" required placeholder="https://x.com/...">
             <button type="submit">Download</button>
         </form>
+
+        <a id="download-link" href="#" download>Click here to download</a>
+        <p id="error-message" style="color: red; margin-top: 10px;"></p>
     </div>
+
+    <script>
+        document.getElementById("download-form").addEventListener("submit", function(event) {
+            event.preventDefault();  // Prevent form submission
+            const url = document.getElementById("url").value;
+            const errorMessage = document.getElementById("error-message");
+            const downloadLink = document.getElementById("download-link");
+
+            errorMessage.textContent = ""; // Clear previous errors
+            downloadLink.style.display = "none"; // Hide link initially
+
+            fetch("/download", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    errorMessage.textContent = data.error;
+                } else {
+                    downloadLink.href = data.file;
+                    downloadLink.style.display = "block";
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = "An error occurred!";
+            });
+        });
+    </script>
 </body>
 </html>
